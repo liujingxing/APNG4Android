@@ -28,7 +28,7 @@ android {
 dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.2.0'
-    api("com.github.penfeizhou.android.animation:frameanimation:${rootProject.ext.Version}")
+    api project(":frameanimation")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
