@@ -218,6 +218,10 @@ public abstract class FrameSeqDecoder<R extends Reader, W extends Writer> {
         });
     }
 
+    public void setSourceSize(int width, int height) {
+        fullRect = new Rect(0, 0, width, height);
+    }
+
     public Rect getBounds() {
         if (fullRect == null) {
             if (mState == State.FINISHING) {

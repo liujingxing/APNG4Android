@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -180,19 +181,23 @@ public abstract class FrameAnimationDrawable<Decoder extends FrameSeqDecoder<?, 
         canvas.drawBitmap(bitmap, matrix, paint);
     }
 
+    public void setSourceSize(int width, int height){
+        frameSeqDecoder.setSourceSize(width, height);
+    }
+
     @Override
-    public void setBounds(int left, int top, int right, int bottom) {
-        super.setBounds(left, top, right, bottom);
+    protected void onBoundsChange(@NonNull Rect bounds) {
         int oldSampleSize = frameSeqDecoder.getSampleSize();
-        int sampleSize = frameSeqDecoder.setDesiredSize(getBounds().width(), getBounds().height());
+        int sampleSize = frameSeqDecoder.setDesiredSize(bounds.width(), bounds.height());
+        Rect frameBounds = frameSeqDecoder.getBounds();
         matrix.setScale(
-                1.0f * getBounds().width() * sampleSize / frameSeqDecoder.getBounds().width(),
-                1.0f * getBounds().height() * sampleSize / frameSeqDecoder.getBounds().height());
+            1.0f * bounds.width() * sampleSize / frameBounds.width(),
+            1.0f * bounds.height() * sampleSize / frameBounds.height());
         if (sampleSize != oldSampleSize)
             this.bitmap = Bitmap.createBitmap(
-                    frameSeqDecoder.getBounds().width() / sampleSize,
-                    frameSeqDecoder.getBounds().height() / sampleSize,
-                    Bitmap.Config.ARGB_8888);
+                frameBounds.width() / sampleSize,
+                frameBounds.height() / sampleSize,
+                Bitmap.Config.ARGB_8888);
     }
 
     @Override
@@ -221,10 +226,11 @@ public abstract class FrameAnimationDrawable<Decoder extends FrameSeqDecoder<?, 
             return;
         }
         if (this.bitmap == null || this.bitmap.isRecycled()) {
+            Rect frameBounds = frameSeqDecoder.getBounds();
             this.bitmap = Bitmap.createBitmap(
-                    frameSeqDecoder.getBounds().width() / frameSeqDecoder.getSampleSize(),
-                    frameSeqDecoder.getBounds().height() / frameSeqDecoder.getSampleSize(),
-                    Bitmap.Config.ARGB_8888);
+                frameBounds.width() / frameSeqDecoder.getSampleSize(),
+                frameBounds.height() / frameSeqDecoder.getSampleSize(),
+                Bitmap.Config.ARGB_8888);
         }
         byteBuffer.rewind();
         if (byteBuffer.remaining() < this.bitmap.getByteCount()) {
