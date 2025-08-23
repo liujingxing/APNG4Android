@@ -1,7 +1,5 @@
 package com.github.penfeizhou.animation.webp.io;
 
-import android.text.TextUtils;
-
 import com.github.penfeizhou.animation.io.ByteBufferWriter;
 
 /**
@@ -34,7 +32,7 @@ public class WebPWriter extends ByteBufferWriter {
     }
 
     public void putFourCC(String fourCC) {
-        if (TextUtils.isEmpty(fourCC) || fourCC.length() != 4) {
+        if (fourCC == null || fourCC.length() != 4) {
             skip(4);
             return;
         }

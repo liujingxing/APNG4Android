@@ -1,7 +1,5 @@
 package com.github.penfeizhou.animation.webp.io;
 
-import android.text.TextUtils;
-
 import com.github.penfeizhou.animation.io.FilterReader;
 import com.github.penfeizhou.animation.io.Reader;
 
@@ -75,7 +73,7 @@ public class WebPReader extends FilterReader {
      * @return read FourCC and match chars
      */
     public boolean matchFourCC(String chars) throws IOException {
-        if (TextUtils.isEmpty(chars) || chars.length() != 4) {
+        if (chars == null || chars.length() != 4) {
             return false;
         }
         int fourCC = getFourCC();
