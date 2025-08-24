@@ -130,7 +130,9 @@ public abstract class FrameAnimationDrawable<Decoder extends FrameSeqDecoder<?, 
             this.frameSeqDecoder.stop();
         }
         this.frameSeqDecoder.reset();
-        innerStart();
+        if (isVisible()) {
+            innerStart();
+        }
     }
 
     private void innerStart() {
